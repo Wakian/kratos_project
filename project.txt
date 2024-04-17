@@ -6,4 +6,7 @@ dia 1:
 
 dia 2:
 	-problema do git push resolvido (com a ajuda do PA)
-	-inicio do flow do Node-Red
+	-download e criação do Node-Red
+	-criação do cluster no hivemq
+	-implementação da comunicação do node red com o projeto do wokwi
+	
