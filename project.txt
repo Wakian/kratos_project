@@ -1,0 +1,9 @@
+dia 1:
+	-criei o projeto no vscode e no wokwi
+	-fiz uma replica do circuito da maquete no wokwi
+	-testei os leds, lampadas, sensor de TOF e servos (todos funcionando)
+	-problema de authenticação no git push
+
+dia 2:
+	-problema do git push resolvido (com a ajuda do PA)
+	-inicio do flow do Node-Red
