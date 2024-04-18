@@ -174,6 +174,14 @@ if (topic ="ian_kratos")  /// esp32 subscribe topic
     } 
 
     else if(str[0] == '4'){ //ultra som
+      if(str[1] == '1'){ //tof 1
+        Serial.println();
+        Serial.print(readTOF()); Serial.println(" Cm");
+      }else if(str[1] == '2'){ //tof 2 *adicionar o outro tof*
+        Serial.println();
+        Serial.print(readTOF()); Serial.println(" Cm");
+      }
+    
 
     }  
  }

@@ -9,4 +9,17 @@ dia 2:
 	-download e criação do Node-Red
 	-criação do cluster no hivemq
 	-implementação da comunicação do node red com o projeto do wokwi
-	
+dia 3:
+	-finalização da integração do wokwi com o Node-Red
+	-conversa com o cliente:
+		-PEDIDO ESPECIAL: adicionar som (modulo mp3) 
+		EX: no modo cinema tocar a marcha imperial (star wars) / modo lockdown tocar audio anunciando
+		que alguem invadiu a casa e que esta ligando automaticamente pra policia
+		
+		-aprovado minha ideia dos modos da casa:
+			-modo normal: nada demais
+			-modo cinema: apague as luzes e deixe um led strip amarelo
+			-modo lockdown: tranque as portas, ligue as luzes pisque os led strip em vermelho
+		-PCB não precisa de nada especial
+		-apresentação em 15 minutos (mais 15 minutos de perguntas)
+	 -
