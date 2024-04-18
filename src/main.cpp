@@ -3,6 +3,7 @@
 #include <ESP32Servo.h>
 #include <PubSubClient.h>
 #include <WiFi.h>
+#include <WString.h>
 
 Servo servo1;
 Servo servo2;
@@ -103,7 +104,7 @@ void setup_wifi() {
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
-   String str;
+  String str;
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
@@ -113,21 +114,24 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.print(str);
 if (topic ="ian_kratos")  /// esp32 subscribe topic   
     Serial.print(" ");
-    split(str,' ');
-    if(str[0] == 1){
-      int status = str[1].stoi();   
-      int pos = map(status, 1, 100, 0, 180);
-      Serial.println(pos);
-      servo1.write(pos);
-      delay(15);
-    }else{
-      int status = str[1].stoi();   
-      int pos = map(status, 1, 100, 0, 180);
-      Serial.println(pos);
-      servo2.write(pos);
-      delay(15);
-    }
-     
+
+    if(str[0] == '1'){
+      if(str[1] == '1'){ //servo 1 abra a porta
+        Serial.println("porta da frente aberta!");
+        servo1.write(90); 
+      }else if (str[1] == '2'){ //servo 1 feche a porta
+        Serial.println("porta da frente fechada!");
+        servo1.write(0);
+      }
+    }else if (str[0] == '2'){
+      if(str[1] == '1'){ //servo 2 abra a porta
+        Serial.println("porta de trás aberta!");
+        servo1.write(90); 
+      }else if (str[1] == '2'){ //servo 2 feche a porta
+        Serial.println("porta de trás fechada!");
+        servo1.write(0);
+      }
+    }     
  }
 
 void reconnect() {
@@ -144,20 +148,3 @@ void reconnect() {
     }
   }
 }
-
-void split (String str, char seperator)  
-{  
-  int currIndex = 0, i = 0;  
-  int startIndex = 0, endIndex = 0;  
-  while (i <= len(str)){
-    if (str[i] == seperator || i == len(str)){  
-      endIndex = i;  
-      String subStr = "";  
-      subStr.append(str, startIndex, endIndex - startIndex);  
-      strings[currIndex] = subStr;  
-      currIndex += 1;  
-      startIndex = endIndex + 1;  
-    }  
-    i++;  
-  }     
-}  
