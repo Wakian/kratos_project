@@ -22,4 +22,6 @@ dia 3:
 			-modo lockdown: tranque as portas, ligue as luzes pisque os led strip em vermelho
 		-PCB não precisa de nada especial
 		-apresentação em 15 minutos (mais 15 minutos de perguntas)
-	 -
+	 	-se der tempo adicionar pelo menos um alarme no celular para quando alguem invadir a casa 
+	 	(modo lockdown) (talvez mandar msg por sms)
+	 -montagem do circuito de teste do led strip irl
