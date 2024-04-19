@@ -30,3 +30,5 @@ dia4:
 	-comunicação do esp irl com o Node-Red funcionando
 	-escolha dos modelos 3D para mobiliar a casa
 	-simplificação do dashboard do Node-Red para o usuario
+dia 5: (mudar os botões para switch no flow do Node-Red)
+	-
