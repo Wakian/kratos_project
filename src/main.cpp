@@ -8,14 +8,14 @@
 Servo servo1;
 Servo servo2;
 
-const char* ssid = "Wokwi-GUEST";
-const char* password = "";
-const char* mqtt_server = "broker.hivemq.com";// MQTT broker
+const char* ssid = "VORTEX";
+const char* password = "pprKN@Fv";
+const char* mqtt_server = "broker.hivemq.com"; // MQTT broker
 
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-#define led1   14
+#define led1   15 //tava no 14
 #define led2   12
 #define led3   32
 #define led4   33
@@ -30,7 +30,25 @@ PubSubClient client(espClient);
 #define TRIG   17
 #define ECHO   16
 
-#define button 26
+#define button 35 // tava no 26
+
+#define RED_LED 26
+#define BLUE_LED 14
+#define GREEN_LED 27
+
+//overall brightness value for the strip leds
+int brightness = 255;
+
+//individual brightness values for the red, green and blue LEDs in the strip
+int gBright = 100; 
+int rBright = 100;
+int bBright = 100;
+
+int fadeSpeed = 10;
+
+const int freq = 5000;
+const int ledChannel = 0;
+const int resolution = 8;
 
 int mode = 0;
 // int tof = readTOF();
@@ -40,43 +58,6 @@ long lastMsg = 0;
 char msg[50];
 int value = 0;
 
-
-void setup() {
-  pinMode(led1,   OUTPUT);
-  pinMode(led2,   OUTPUT);
-  pinMode(led3,   OUTPUT);
-  pinMode(led4,   OUTPUT);
-
-  pinMode(lamp1,  OUTPUT);
-  pinMode(lamp2,  OUTPUT);
-  pinMode(lamp3,  OUTPUT);
- 
-  pinMode(door1,  OUTPUT);
-  pinMode(door2,  OUTPUT);
- 
-  pinMode(TRIG,   OUTPUT);
-  pinMode(ECHO,   INPUT);
-
-  pinMode(button, INPUT_PULLUP);
-
-  servo1.attach(18);
-  servo2.attach(5);
-
-  Serial.begin(115200);
-
-  setup_wifi();
-  client.setServer(mqtt_server, 1883);
-  client.setCallback(callback);
-}
-
-void loop() {
-  if (!client.connected()) {
-    reconnect();
-  }
-  client.loop(); 
-  delay(100);
-
-}
 
 int readTOF(){
   digitalWrite(TRIG, HIGH);
@@ -88,8 +69,33 @@ int readTOF(){
   return duration/58;
 }
 
+void TurnOn(){
+   
+    for (int i=0;i<256; i++){
+      
+      analogWrite(RED_LED, rBright);
+      rBright +=1;
+      delay(fadeSpeed);
+
+    }
+    
+    for (int i=0;i<256; i++){
+      
+      analogWrite(BLUE_LED, bBright);
+      bBright += 1;
+      delay(fadeSpeed);
+    }  
+
+    for (int i=0;i<256; i++){
+      
+      analogWrite(GREEN_LED, gBright);
+      gBright +=1;
+      delay(fadeSpeed);
+    }  
+}
+
 void setup_wifi() {
-  delay(10);
+  delay(100);
   Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
@@ -104,7 +110,7 @@ void setup_wifi() {
   Serial.println(WiFi.localIP());
 }
 
-void callback(char* topic, byte* payload, unsigned int length) {
+void callback(String topic, byte* payload, unsigned int length) {
   String str;
   Serial.print("Message arrived [");
   Serial.print(topic);
@@ -113,7 +119,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
      str+=((char)payload[i]);  
   }
     Serial.print(str);
-if (topic ="ian_kratos")  /// esp32 subscribe topic   
+if (topic = "ian_kratos")  /// esp32 subscribe topic   
     Serial.print(" ");
 
     if(str[0] == '0'){ //leds
@@ -181,9 +187,14 @@ if (topic ="ian_kratos")  /// esp32 subscribe topic
         Serial.println();
         Serial.print(readTOF()); Serial.println(" Cm");
       }
-    
+    }
 
-    }  
+    else if(str[0] == '5'){
+      if(str[1] == '0'){
+        TurnOn();
+      }
+    }
+    
  }
 
 void reconnect() {
@@ -199,4 +210,42 @@ void reconnect() {
       delay(5000);
     }
   }
+}
+
+
+void setup() {
+  pinMode(led1,   OUTPUT);
+  pinMode(led2,   OUTPUT);
+  pinMode(led3,   OUTPUT);
+  pinMode(led4,   OUTPUT);
+
+  pinMode(lamp1,  OUTPUT);
+  pinMode(lamp2,  OUTPUT);
+  pinMode(lamp3,  OUTPUT);
+ 
+  pinMode(door1,  OUTPUT);
+  pinMode(door2,  OUTPUT);
+ 
+  pinMode(TRIG,   OUTPUT);
+  pinMode(ECHO,   INPUT);
+
+  pinMode(button, INPUT_PULLUP);
+
+  servo1.attach(18);
+  servo2.attach(5);
+
+  Serial.begin(115200);
+
+  setup_wifi();
+  client.setServer(mqtt_server, 1883);
+  client.setCallback(callback);
+}
+
+void loop() {
+  if (!client.connected()) {
+    reconnect();
+  }
+  client.loop(); 
+  delay(100);
+
 }
