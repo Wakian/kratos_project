@@ -71,7 +71,7 @@ int readTOF(int num){
     int duration = pulseIn(ECHO1, HIGH);
 
     return duration/58;
-  }else if(num == 2){
+  }else{
     digitalWrite(TRIG2, HIGH);
     delayMicroseconds(10);
     digitalWrite(TRIG2, LOW);
@@ -105,6 +105,14 @@ void TurnOn(){
       gBright +=1;
       delay(fadeSpeed);
     }  
+}
+
+void hexToRGB(String hex, int& red, int& green, int& blue){
+  String subHex = hex.substring(0);
+  unsigned long hexValue = 255 - strtoul(subHex.c_str(), NULL, 16);
+  red = (hexValue >> 16) & 0xFF;
+  green = (hexValue >> 8) & 0xFF;
+  blue = hexValue & 0xFF;
 }
 
 void setup_wifi() {
@@ -203,9 +211,12 @@ if (topic = "ian_kratos")  /// esp32 subscribe topic
     }
 
     else if(str[0] == '5'){ //led strip
-      if(str[1] == '0'){
-        TurnOn();
-      }
+      int r,g,b;
+      hexToRGB(str, r, g, b);
+      analogWrite(RED_LED,r);
+      analogWrite(GREEN_LED,g);
+      analogWrite(BLUE_LED,b);
+      Serial.println();
     }
     
  }
