@@ -31,4 +31,13 @@ dia4:
 	-escolha dos modelos 3D para mobiliar a casa
 	-simplificação do dashboard do Node-Red para o usuario
 dia 5: (mudar os botões para switch no flow do Node-Red)
-	-
+	-não tive acesso ao Node-Red de casa então não pude fazer muito no fim de semana
+	-adição de mais um sensor de distancia ultra som
+dia 6:
+	-inicio dos slides
+dia 7:
+	-inpressão dos moveis
+	-planejamento da alimentação do circuito
+	-color selector 
+	-transformar os botões em switches no Node-Red
+	

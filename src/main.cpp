@@ -8,8 +8,8 @@
 Servo servo1;
 Servo servo2;
 
-const char* ssid = "VORTEX";
-const char* password = "pprKN@Fv";
+const char* ssid = "VORTEX"; // VORTEX | Wokwi-GUEST
+const char* password = "pprKN@Fv"; // pprKN@Fv | (no password)
 const char* mqtt_server = "broker.hivemq.com"; // MQTT broker
 
 WiFiClient espClient;
@@ -27,8 +27,11 @@ PubSubClient client(espClient);
 #define door1  18
 #define door2   5
 
-#define TRIG   17
-#define ECHO   16
+#define TRIG1   17
+#define ECHO1   16
+
+#define TRIG2   4
+#define ECHO2   0
 
 #define button 35 // tava no 26
 
@@ -59,14 +62,24 @@ char msg[50];
 int value = 0;
 
 
-int readTOF(){
-  digitalWrite(TRIG, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(TRIG, LOW);
+int readTOF(int num){
+  if(num == 1){
+    digitalWrite(TRIG1, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(TRIG1, LOW);
 
-  int duration = pulseIn(ECHO, HIGH);
+    int duration = pulseIn(ECHO1, HIGH);
 
-  return duration/58;
+    return duration/58;
+  }else if(num == 2){
+    digitalWrite(TRIG2, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(TRIG2, LOW);
+
+    int duration = pulseIn(ECHO2, HIGH);
+
+    return duration/58;
+  }
 }
 
 void TurnOn(){
@@ -182,14 +195,14 @@ if (topic = "ian_kratos")  /// esp32 subscribe topic
     else if(str[0] == '4'){ //ultra som
       if(str[1] == '1'){ //tof 1
         Serial.println();
-        Serial.print(readTOF()); Serial.println(" Cm");
-      }else if(str[1] == '2'){ //tof 2 *adicionar o outro tof*
+        Serial.print(readTOF(1)); Serial.println(" Cm");
+      }else if(str[1] == '2'){ //tof 2 
         Serial.println();
-        Serial.print(readTOF()); Serial.println(" Cm");
+        Serial.print(readTOF(2)); Serial.println(" Cm");
       }
     }
 
-    else if(str[0] == '5'){
+    else if(str[0] == '5'){ //led strip
       if(str[1] == '0'){
         TurnOn();
       }
@@ -226,8 +239,11 @@ void setup() {
   pinMode(door1,  OUTPUT);
   pinMode(door2,  OUTPUT);
  
-  pinMode(TRIG,   OUTPUT);
-  pinMode(ECHO,   INPUT);
+  pinMode(TRIG1,   OUTPUT);
+  pinMode(ECHO1,   INPUT);
+
+  pinMode(TRIG2,   OUTPUT);
+  pinMode(ECHO2,   INPUT);
 
   pinMode(button, INPUT_PULLUP);
 
