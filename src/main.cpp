@@ -4,16 +4,20 @@
 #include <PubSubClient.h>
 #include <WiFi.h>
 #include <WString.h>
+#include <JQ6500_Serial.h>
+#include "mp3.h"
 
 Servo servo1;
 Servo servo2;
+
+JQ6500_Serial mp3 = JQ6500_Serial(Serial2);
 
 const char* ssid = "VORTEX"; // VORTEX | Wokwi-GUEST
 const char* password = "pprKN@Fv"; // pprKN@Fv | (no password)
 const char* mqtt_server = "broker.hivemq.com"; // MQTT broker
 
-WiFiClient espClient;
-PubSubClient client(espClient);
+WiFiClient wakiClient;
+PubSubClient client(wakiClient);
 
 #define led1   15 //tava no 14
 #define led2   12
@@ -27,17 +31,16 @@ PubSubClient client(espClient);
 #define door1  18
 #define door2   5
 
-#define TRIG1   17
-#define ECHO1   16
+#define TRIG   25
+#define ECHO   26
 
-#define TRIG2   4
-#define ECHO2   0
+// #define button 35 // tava no 26
 
-#define button 35 // tava no 26
+#define RED_LED 0//26
+#define BLUE_LED 0//14
+#define GREEN_LED 0//27
 
-#define RED_LED 26
-#define BLUE_LED 14
-#define GREEN_LED 27
+#define mp3_busy_pin 4
 
 //overall brightness value for the strip leds
 int brightness = 255;
@@ -62,24 +65,14 @@ char msg[50];
 int value = 0;
 
 
-int readTOF(int num){
-  if(num == 1){
-    digitalWrite(TRIG1, HIGH);
+int readTOF(){
+    digitalWrite(TRIG, HIGH);
     delayMicroseconds(10);
-    digitalWrite(TRIG1, LOW);
+    digitalWrite(TRIG, LOW);
 
-    int duration = pulseIn(ECHO1, HIGH);
+    int duration = pulseIn(ECHO, HIGH);
 
     return duration/58;
-  }else{
-    digitalWrite(TRIG2, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(TRIG2, LOW);
-
-    int duration = pulseIn(ECHO2, HIGH);
-
-    return duration/58;
-  }
 }
 
 void TurnOn(){
@@ -187,26 +180,23 @@ if (topic = "ian_kratos")  /// esp32 subscribe topic
 
     else if(str[0] == '3'){ //lampadas
       if(str[1] == '1'){ //lamp 1
-        if(str[2] == '0'){digitalWrite(lamp1,LOW);}
-        else{digitalWrite(lamp1,HIGH);}
+        if(str[2] == '0'){digitalWrite(lamp1,HIGH);}
+        else{digitalWrite(lamp1,LOW);}
       }
       else if (str[1] == '2'){ //lamp 2
-        if(str[2] == '0'){digitalWrite(lamp2,LOW);}
-        else{digitalWrite(lamp2,HIGH);}
+        if(str[2] == '0'){digitalWrite(lamp2,HIGH);}
+        else{digitalWrite(lamp2,LOW);}
       }
       else if (str[1] == '3'){
-        if(str[2] == '0'){digitalWrite(lamp3,LOW);}
-        else{digitalWrite(lamp3,HIGH);}        
+        if(str[2] == '0'){digitalWrite(lamp3,HIGH);}
+        else{digitalWrite(lamp3,LOW);}        
       }      
     } 
 
     else if(str[0] == '4'){ //ultra som
       if(str[1] == '1'){ //tof 1
         Serial.println();
-        Serial.print(readTOF(1)); Serial.println(" Cm");
-      }else if(str[1] == '2'){ //tof 2 
-        Serial.println();
-        Serial.print(readTOF(2)); Serial.println(" Cm");
+        Serial.print(readTOF()); Serial.println(" Cm");
       }
     }
 
@@ -218,13 +208,18 @@ if (topic = "ian_kratos")  /// esp32 subscribe topic
       analogWrite(BLUE_LED,b);
       Serial.println();
     }
+
+    else if(str[0] == '6'){
+      mp3.play();
+      Serial.println("mp3 playing");
+    }
     
  }
 
 void reconnect() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
-    if (client.connect("ESPClient")) {
+    if (client.connect("wakiClient")) {
       Serial.println("connected");
       client.subscribe("ian_kratos");
     } else {
@@ -250,22 +245,30 @@ void setup() {
   pinMode(door1,  OUTPUT);
   pinMode(door2,  OUTPUT);
  
-  pinMode(TRIG1,   OUTPUT);
-  pinMode(ECHO1,   INPUT);
+  pinMode(TRIG,   OUTPUT);
+  pinMode(ECHO,   INPUT);
 
-  pinMode(TRIG2,   OUTPUT);
-  pinMode(ECHO2,   INPUT);
+  pinMode(mp3_busy_pin, INPUT);
 
-  pinMode(button, INPUT_PULLUP);
+  digitalWrite(lamp1, HIGH);
+  digitalWrite(lamp2, HIGH);
+  digitalWrite(lamp3, HIGH);
+
+  // pinMode(button, INPUT_PULLUP);
 
   servo1.attach(18);
   servo2.attach(5);
 
   Serial.begin(115200);
+  Serial2.begin(9600);
 
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
+
+  mp3.reset();
+  mp3.setLoopMode(MP3_LOOP_NONE); // se der erro tente MP3_LOOP_ONE_STOP
+  mp3.setVolume(30);
 }
 
 void loop() {

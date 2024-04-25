@@ -36,8 +36,18 @@ dia 5: (mudar os botões para switch no flow do Node-Red)
 dia 6:
 	-inicio dos slides
 dia 7:
-	-inpressão dos moveis
-	-planejamento da alimentação do circuito
+	-impressão dos moveis
+	-planejamento da alimentação do circuito (alimentação de 5 volt vindo da tomada)
 	-color selector 
 	-transformar os botões em switches no Node-Red
+dia 8:
+	-impressão do resto dos moveis
+	-estudo do modolu mp3
+dia 9:
+	-modulo mp3 terminado
+	-começo do prototipo irl
+dia 10:
+	-prototipo irl pronto para testes
 	
+
+(maiores problemas: mp3, testes irl com o prototipo)
