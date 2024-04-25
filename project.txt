@@ -47,7 +47,5 @@ dia 9:
 	-modulo mp3 terminado
 	-começo do prototipo irl
 dia 10:
-	-prototipo irl pronto para testes
-	
-
-(maiores problemas: mp3, testes irl com o prototipo)
+	-prototipo irl pronto para testes e finalizado (menos led strip) e testado
+(maiores problemas: mp3, testes irl com o prototipo o prototipo requer mais energia que o esp32 oferece)
