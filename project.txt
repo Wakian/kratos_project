@@ -47,5 +47,12 @@ dia 9:
 	-modulo mp3 terminado
 	-começo do prototipo irl
 dia 10:
-	-prototipo irl pronto para testes e finalizado (menos led strip) e testado
-(maiores problemas: mp3, testes irl com o prototipo o prototipo requer mais energia que o esp32 oferece)
+	-prototipo irl pronto, testado e finalizado (menos led strip)
+dia 11:
+	-começo do esquemático da PCB 
+dia 12:
+	-quase termino da PCB
+	-ideia do daniel em usar dois pinos analogicos para ler tensões variaveis de cada botao
+
+(maiores problemas: mp3, testes irl com o prototipo por requer 
+ mais energia que o esp32 oferece aprender e usar o kicad, colocar os 8 botoes no esp32)
